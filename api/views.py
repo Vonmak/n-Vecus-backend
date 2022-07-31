@@ -19,22 +19,6 @@ class CreateUserView(generics.CreateAPIView):
     authentication_classes = ()
     permission_classes = ()
     serializer_class = UserSerializer
-    def post(self, request, *args,**kwargs):
-        serializers=AuthTokenSerializer(data=request.data)
-        serializers.is_valid(raise_exception=True)
-        user = serializers.validated_data['user']
-        refresh = RefreshToken.for_user(user)
-        login(request, user)
-        
-        return Response({
-            'username': user.username,
-            'id': user.id,
-            'email': user.email,
-            'roles': user.roles,
-            'phone': user.phone,
-            'refresh': str(refresh),
-            'access': str(refresh.access_token),
-        })
 class LoginView(APIView):
     permission_classes = (permissions.AllowAny,)
     serializer_class = LoginSerializer
